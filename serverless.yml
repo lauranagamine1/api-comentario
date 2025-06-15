@@ -44,6 +44,6 @@ resources:
   BucketIngesta:
         Type: AWS::S3::Bucket
         Properties:
-          BucketName: ${sls:stage}-bucket-ingesta-jr
+          BucketName: ${sls:stage}-bucket-ingesta
           VersioningConfiguration:
             Status: Suspended
