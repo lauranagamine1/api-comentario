@@ -13,9 +13,8 @@ provider:
     role: arn:aws:iam::004571481520:role/LabRole
   environment:
     TABLE_NAME: ${self:custom.stage}-t_comentarios
-  tags:
-    project: api-comentario
-    owner: lauranagamine
+    INGEST_BUCKET: ${self:custom.stage}-bucket-ingesta
+
 
 functions:
   crear:
@@ -48,6 +47,6 @@ resources:
     BucketIngesta:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: ${self:custom.stage}-bucket-ingesta-jr
+        BucketName: ${self:custom.stage}-bucket-ingesta
         VersioningConfiguration:
           Status: Suspended
