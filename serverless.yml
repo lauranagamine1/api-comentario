@@ -1,9 +1,6 @@
 org: lauranagamine
 service: api-comentario
 
-custom:
-  stage: ${opt:stage, 'dev'}
-
 provider:
   name: aws
   runtime: python3.12
@@ -12,9 +9,8 @@ provider:
   iam:
     role: arn:aws:iam::004571481520:role/LabRole
   environment:
-    TABLE_NAME: ${self:custom.stage}-t_comentarios
-    INGEST_BUCKET: ${self:custom.stage}-bucket-ingesta
-
+    TABLE_NAME: ${sls:stage}-t_comentarios
+    INGEST_BUCKET: ${sls:stage}-bucket-ingesta-jr
 
 functions:
   crear:
@@ -31,7 +27,7 @@ resources:
     TablaComentarios:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.environment.TABLE_NAME}
+        TableName: ${sls:stage}-t_comentarios
         AttributeDefinitions:
           - AttributeName: tenant_id
             AttributeType: S
@@ -47,6 +43,6 @@ resources:
     BucketIngesta:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: ${self:custom.stage}-bucket-ingesta
+        BucketName: ${sls:stage}-bucket-ingesta-jr
         VersioningConfiguration:
           Status: Suspended

@@ -4,10 +4,12 @@ import os
 import json
 
 def lambda_handler(event, context):
+
     tenant_id = event['body']['tenant_id']
     texto = event['body']['texto']
     nombre_tabla = os.environ["TABLE_NAME"]
     bucket_name = os.environ["INGEST_BUCKET"]
+
 
     uuidv1 = str(uuid.uuid1())
     comentario = {
@@ -18,9 +20,11 @@ def lambda_handler(event, context):
         }
     }
 
+
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table(nombre_tabla)
     response = table.put_item(Item=comentario)
+
 
     s3 = boto3.client('s3')
     s3_key = f"{tenant_id}/{uuidv1}.json"
@@ -30,6 +34,7 @@ def lambda_handler(event, context):
         Body=json.dumps(comentario),
         ContentType='application/json'
     )
+
 
     return {
         'statusCode': 200,
